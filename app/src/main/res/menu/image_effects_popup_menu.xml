@@ -106,10 +106,4 @@
         android:title="@string/image_effect_mean_round_corner"
         android:visible="true"/>
 
-    <item
-        android:id="@+id/image_effect_mean_water_mark"
-        android:showAsAction="ifRoom|withText"
-        android:title="@string/image_effect_mean_water_mark"
-        android:visible="true"/>
-
 </menu>

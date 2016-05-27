@@ -39,11 +39,14 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
     private static final int SELECT_FILE = 100;
     private static final int REQUEST_CAMERA = 101;
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
-
+    private static final int MAX_ANGLE = 360;
+    private static final int MIN_ANGLE = 0;
     private ImageView mCanvasImageView;
     private String mUserChoosenTask;
     private View mEmptyPhotoViewContainer;
     private boolean mImageChoosen;
+    private int mCWRotationAngle;
+    private int mACWRotationAngle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,9 +121,19 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
                 break;
 
             case R.id.rotate_acw:
+                mCWRotationAngle = 360 - mCWRotationAngle - 90;
+                if (mCWRotationAngle < MIN_ANGLE) {
+                    mCWRotationAngle = 0;
+                }
+                mCanvasImageView.setRotation(mCWRotationAngle);
                 break;
 
             case R.id.rotate_cw:
+                mCWRotationAngle += 90;
+                if (mCWRotationAngle > MAX_ANGLE) {
+                    mCWRotationAngle = 0;
+                }
+                mCanvasImageView.setRotation(mCWRotationAngle);
                 break;
         }
     }
@@ -199,10 +212,6 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
 
             case R.id.image_effect_mean_round_corner:
                 outputBmp = imageFilter.applyRoundCornerEffect(abmp.getBitmap(), 1);
-                break;
-
-            case R.id.image_effect_mean_water_mark:
-               // outputBmp = imageFilter.applyWaterMarkEffect(abmp.getBitmap());
                 break;
 
             default:
