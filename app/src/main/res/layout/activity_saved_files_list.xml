@@ -16,7 +16,6 @@
         android:background="?attr/colorPrimary"
         android:titleTextColor="@android:color/white"
         app:popupTheme="@style/AppTheme.PopupOverlay">
-
         <RelativeLayout android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
@@ -26,42 +25,31 @@
                       android:id="@+id/toolbarTitle"
                       android:gravity="center_vertical"
                       android:textSize="20sp"
+                      android:drawableLeft="@drawable/nt_back_arrow"
                       android:textColor="@android:color/white"
+                      android:drawablePadding="10dp"
                       android:textStyle="bold"/>
 
-            <ImageButton android:layout_width="wrap_content"
-                         android:layout_height="match_parent"
-                         android:scaleType="center"
-                         android:id="@+id/saved_list"
-                         android:layout_toLeftOf="@+id/save_file"
-                         android:src="@drawable/saved_list"/>
-
-            <ImageButton android:layout_width="wrap_content"
-                         android:layout_height="match_parent"
-                         android:scaleType="center"
-                         android:id="@+id/save_file"
-                         android:layout_alignParentRight="true"
-                         android:src="@drawable/save_icon"/>
-
         </RelativeLayout>
-
     </android.support.v7.widget.Toolbar>
 
-    <include layout="@layout/content_main"
-             android:layout_below="@id/toolbar"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"/>
+    <android.support.v7.widget.RecyclerView android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:layout_below="@id/toolbar"
+                                            android:id="@+id/recycler_view">
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="100dp"
-        android:src="@drawable/plus_icon"/>
+    </android.support.v7.widget.RecyclerView>
+
+    <TextView android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:scaleType="center"
+              android:id="@+id/empty_list"
+              android:gravity="center"
+              android:text="@string/no_files"
+              android:textSize="20sp"
+              android:layout_below="@id/toolbar"
+              android:visibility="visible"
+              android:textColor="@android:color/black"
+              android:textStyle="bold"/>
 
 </RelativeLayout>

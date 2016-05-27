@@ -13,13 +13,12 @@
     <string name="new_image_confirmation">Your changes will be discarded. Are you sure want to quit without saving?</string>
     <string name="alert">Alert!</string>
     <string name="select_file">Select File</string>
+    <string name="saved_files">Saved Collections</string>
+    <string name="no_files">No files found.</string>
 
     <string name="image_effect_highlight">Highlight</string>
     <string name="image_effect_invert">Invert</string>
     <string name="image_effect_gray">GreyScale</string>
-    <string name="image_effect_gama">Gama</string>
-    <string name="image_effect_color_filter">Color Filter</string>
-    <string name="image_effect_sepia">Sepia</string>
     <string name="image_effect_decrease_color_depth">Decrease Color Depth</string>
     <string name="image_effect_contrast">Contrast</string>
     <string name="image_effect_gaussian_blur">Gaussian Blur</string>
@@ -30,6 +29,7 @@
     <string name="image_effect_mean_emboss">Emboss</string>
     <string name="image_effect_mean_engrave">Engrave</string>
     <string name="image_effect_mean_round_corner">Round Corner</string>
+    <string name="please_edit_image">Please edit your image</string>
 
     <string-array name="photo_options">
         <item>@string/take_photo</item>

@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,11 +21,14 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.studyjam.android.photoeditor.utils.Constants;
 import com.studyjam.android.photoeditor.utils.ImageFilter;
 
 import java.io.ByteArrayOutputStream;
@@ -38,6 +42,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
 
     private static final int SELECT_FILE = 100;
     private static final int REQUEST_CAMERA = 101;
+    private static final int CHOOSE_FROM_SAVED_FILE_LIST = 102;
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
     private static final int MAX_ANGLE = 360;
     private static final int MIN_ANGLE = 0;
@@ -48,6 +53,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
     private boolean mImageChoosen;
     private int mCWRotationAngle;
     private static final String MIME_TYPE = "image/*";
+    private String mCurrenctFileName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,15 +69,14 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
     private void initialiseViews() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.photo_editor);
+        TextView titleView = (TextView) findViewById(R.id.toolbarTitle);
+        titleView.setText(R.string.photo_editor);
         toolbar.setTitleTextColor(ContextCompat.getColor(this, android.R.color.white));
         setSupportActionBar(toolbar);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               /* Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();*/
-
                 if (mImageChoosen) {
                     showAlertOnNewPic();
                 } else {
@@ -87,6 +92,8 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         findViewById(R.id.image_effects).setOnClickListener(this);
         findViewById(R.id.rotate_acw).setOnClickListener(this);
         findViewById(R.id.rotate_cw).setOnClickListener(this);
+        findViewById(R.id.saved_list).setOnClickListener(this);
+        findViewById(R.id.save_file).setOnClickListener(this);
     }
 
     /**
@@ -143,7 +150,56 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
                 }
                 mCanvasImageView.setRotation(mCWRotationAngle);
                 break;
+
+            case R.id.saved_list:
+                launchSavedCollectionsScreen();
+                break;
+
+            case R.id.save_file:
+                if (mImageChoosen) {
+                    if (TextUtils.isEmpty(mCurrenctFileName)) {
+                        mCurrenctFileName = System.currentTimeMillis() + Constants.FILE_EXTENSION;
+                    }
+                    saveFile();
+                } else {
+                    Toast.makeText(this, R.string.please_edit_image, Toast.LENGTH_SHORT).show();
+                }
+                break;
         }
+    }
+
+    private void saveFile() {
+        BitmapDrawable bitmapDrawable = (BitmapDrawable) mCanvasImageView.getDrawable();
+        Bitmap bmp = bitmapDrawable.getBitmap();
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        File destination = new File(Environment.getExternalStorageDirectory() + File.separator + Constants.FOLDER_NAME,
+                mCurrenctFileName);
+        File cacheDir = new File(Environment.getExternalStorageDirectory() + File.separator + Constants.FOLDER_NAME);
+        if(!cacheDir.exists()) {
+            cacheDir.mkdirs();
+        }
+
+        FileOutputStream fo;
+        try {
+            destination.createNewFile();
+            fo = new FileOutputStream(destination);
+            fo.write(bytes.toByteArray());
+            fo.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (bmp != null) {
+            updateUI();
+            mCanvasImageView.setImageBitmap(bmp);
+        }
+    }
+
+    private void launchSavedCollectionsScreen() {
+        Intent intent = new Intent(this, CollectionsActivity.class);
+        startActivityForResult(intent, CHOOSE_FROM_SAVED_FILE_LIST);
     }
 
     @Override
@@ -164,18 +220,6 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
 
             case R.id.image_effect_gray:
                 outputBmp = imageFilter.applyGreyscaleEffect(abmp.getBitmap());
-                break;
-
-            case R.id.image_effect_gama:
-                outputBmp = imageFilter.applyGammaEffect(abmp.getBitmap(), 255, 255, 255);
-                break;
-
-            case R.id.image_effect_color_filter:
-                outputBmp = imageFilter.applyColorFilterEffect(abmp.getBitmap(), 255, 255, 255);
-                break;
-
-            case R.id.image_effect_sepia:
-                outputBmp = imageFilter.applySepiaToningEffect(abmp.getBitmap(), 1, 255, 255, 255);
                 break;
 
             case R.id.image_effect_decrease_color_depth:
@@ -280,14 +324,28 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == SELECT_FILE) {
                 onSelectFromGalleryResult(data);
             } else if (requestCode == REQUEST_CAMERA) {
                 onCaptureImageResult(data);
+            } else if (requestCode == CHOOSE_FROM_SAVED_FILE_LIST) {
+                onSelectFromSavedCollections(data);
             }
-        } else {
-            resetUI();
+        }
+    }
+
+    private void onSelectFromSavedCollections(Intent data) {
+        if (data != null && data.hasExtra(Constants.SELECTED_FILE_PATH)) {
+            String selectedFilePath = data.getStringExtra(Constants.SELECTED_FILE_PATH);
+            if (!TextUtils.isEmpty(selectedFilePath)) {
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                Bitmap bitmap = BitmapFactory.decodeFile(selectedFilePath, options);
+                mCanvasImageView.setImageBitmap(bitmap);
+                updateUI();
+            }
         }
     }
 
@@ -323,6 +381,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
             e.printStackTrace();
         }
         if (thumbnail != null) {
+            mCurrenctFileName = null;
             updateUI();
             mCanvasImageView.setImageBitmap(thumbnail);
         }
@@ -347,6 +406,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
 
         if (data != null) {
             try {
+                mCurrenctFileName = null;
                 updateUI();
                 bm = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
             } catch (IOException e) {

@@ -42,7 +42,7 @@
                   android:orientation="horizontal"
                   android:gravity="center"
                   android:layout_alignParentBottom="true"
-                  android:layout_weight="0.75"
+                  android:visibility="gone"
                   android:layout_gravity="center_horizontal"
                   android:id="@+id/photo_edit_options_container">
 
@@ -69,7 +69,5 @@
             android:scaleType="center"
             android:layout_weight="1"
             android:src="@drawable/rotate_acw"/>
-
-
     </LinearLayout>
 </RelativeLayout>
