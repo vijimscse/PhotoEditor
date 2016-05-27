@@ -44,9 +44,10 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
     private ImageView mCanvasImageView;
     private String mUserChoosenTask;
     private View mEmptyPhotoViewContainer;
+    private View mPhotoOptionsContainer;
     private boolean mImageChoosen;
     private int mCWRotationAngle;
-    private int mACWRotationAngle;
+    private static final String MIME_TYPE = "image/*";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +57,9 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         initialiseViews();
     }
 
+    /**
+     * Initialises the views
+     */
     private void initialiseViews() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.photo_editor);
@@ -77,6 +81,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         });
         mCanvasImageView = (ImageView) findViewById(R.id.edit_image);
         mEmptyPhotoViewContainer = findViewById(R.id.emtpy_photo_view_container);
+        mPhotoOptionsContainer = findViewById(R.id.photo_edit_options_container);
 
         mEmptyPhotoViewContainer.setOnClickListener(this);
         findViewById(R.id.image_effects).setOnClickListener(this);
@@ -84,6 +89,9 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         findViewById(R.id.rotate_cw).setOnClickListener(this);
     }
 
+    /**
+     * Displays the alert dialog when there are some changes left without saving
+     */
     private void showAlertOnNewPic() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         TextView titleView = (TextView) getLayoutInflater().inflate(R.layout.custom_dialog_title_view, null);
@@ -206,10 +214,6 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
                 outputBmp = imageFilter.applyEngraveEffect(abmp.getBitmap());
                 break;
 
-            case R.id.image_effect_mean_boost:
-                outputBmp = imageFilter.applyBoostEffect(abmp.getBitmap(), 1, 1.0F);
-                break;
-
             case R.id.image_effect_mean_round_corner:
                 outputBmp = imageFilter.applyRoundCornerEffect(abmp.getBitmap(), 1);
                 break;
@@ -226,6 +230,9 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         return handled;
     }
 
+    /**
+     * Displays the dialog on new addition of photo whether from Camera/Gallery
+     */
     private void showImageSourceDialog() {
         final String[] items = getResources().getStringArray(R.array.photo_options);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -252,13 +259,19 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         builder.create().show();
     }
 
+    /**
+     * Launches the gallery screen
+     */
     private void launchGallery() {
         Intent intent = new Intent();
-        intent.setType("image/*");
+        intent.setType(MIME_TYPE);
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select File"), SELECT_FILE);
+        startActivityForResult(Intent.createChooser(intent, getString(R.string.select_file)), SELECT_FILE);
     }
 
+    /**
+     * Launches the camera
+     */
     private void launchCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, REQUEST_CAMERA);
@@ -274,12 +287,24 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
                 onCaptureImageResult(data);
             }
         } else {
-            mEmptyPhotoViewContainer.setVisibility(View.GONE);
-            mCanvasImageView.setVisibility(View.GONE);
-            mImageChoosen = false;
+            resetUI();
         }
     }
 
+    /**
+     * Resets the UI to fresh state
+     */
+    private void resetUI() {
+        mEmptyPhotoViewContainer.setVisibility(View.VISIBLE);
+        mCanvasImageView.setVisibility(View.GONE);
+        mPhotoOptionsContainer.setVisibility(View.GONE);
+        mImageChoosen = false;
+    }
+
+    /**
+     * Called when the control comes back from camera screen
+     * @param data
+     */
     private void onCaptureImageResult(Intent data) {
         Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -298,21 +323,31 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
             e.printStackTrace();
         }
         if (thumbnail != null) {
-            mEmptyPhotoViewContainer.setVisibility(View.GONE);
-            mCanvasImageView.setVisibility(View.VISIBLE);
-            mImageChoosen = true;
+            updateUI();
             mCanvasImageView.setImageBitmap(thumbnail);
         }
     }
 
+    /**
+     * Updates the UI when the image is choosen from gallery or camera
+     */
+    private void updateUI() {
+        mEmptyPhotoViewContainer.setVisibility(View.GONE);
+        mCanvasImageView.setVisibility(View.VISIBLE);
+        mImageChoosen = true;
+        mPhotoOptionsContainer.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * Called when the control comes back from gallery
+     * @param data
+     */
     private void onSelectFromGalleryResult(Intent data) {
         Bitmap bm = null;
 
         if (data != null) {
             try {
-                mEmptyPhotoViewContainer.setVisibility(View.GONE);
-                mCanvasImageView.setVisibility(View.VISIBLE);
-                mImageChoosen = true;
+                updateUI();
                 bm = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
             } catch (IOException e) {
                 e.printStackTrace();
