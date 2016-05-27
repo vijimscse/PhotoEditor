@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">PhotoEditor</string>
+    <string name="action_settings">Settings</string>
+    <string name="photo_editor">Photo Editor</string>
+    <string name="add_photo">Add Photo</string>
+    <string name="Effects">Effects</string>
+    <string name="take_photo">Take Photo</string>
+    <string name="choose_frm_gallery">Choose from Library</string>
+    <string name="permission_required">Permission Required</string>
+    <string name="external_storage_permission_required"> External storage permission is necessary</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="new_image_confirmation">Your changes will be discarded. Are you sure want to quit without saving?</string>
+    <string name="alert">Alert!</string>
+    <string-array name="photo_options">
+        <item>@string/take_photo</item>
+        <item>@string/choose_frm_gallery</item>
+    </string-array>
+</resources>
