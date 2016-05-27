@@ -6,7 +6,8 @@
           android:padding="10dp"
           android:textStyle="bold"
           android:text="@string/add_photo"
-          android:textColor="@android:color/black"
+          android:textColor="@android:color/white"
+          android:textSize="20sp"
           android:background="@color/colorPrimary">
 
 </TextView>

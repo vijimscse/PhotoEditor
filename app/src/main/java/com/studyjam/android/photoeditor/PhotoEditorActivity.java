@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -17,10 +18,14 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.studyjam.android.photoeditor.utils.ImageFilter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -28,7 +33,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class PhotoEditorActivity extends AppCompatActivity implements View.OnClickListener {
+public class PhotoEditorActivity extends AppCompatActivity implements View.OnClickListener,
+        PopupMenu.OnMenuItemClickListener {
+
     private static final int SELECT_FILE = 100;
     private static final int REQUEST_CAMERA = 101;
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
@@ -49,6 +56,8 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
     private void initialiseViews() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.photo_editor);
+        toolbar.setTitleTextColor(ContextCompat.getColor(this, android.R.color.white));
+        setSupportActionBar(toolbar);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,7 +96,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                dialog.dismiss();
             }
         });
         builder.setMessage(R.string.new_image_confirmation);
@@ -102,6 +111,10 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
                 break;
 
             case R.id.image_effects:
+                PopupMenu popupMenu = new PopupMenu(this, v);
+                popupMenu.setOnMenuItemClickListener(this);
+                popupMenu.inflate(R.menu.image_effects_popup_menu);
+                popupMenu.show();
                 break;
 
             case R.id.rotate_acw:
@@ -112,28 +125,122 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        BitmapDrawable abmp = (BitmapDrawable) mCanvasImageView.getDrawable();
+        boolean handled = true;
+        Bitmap outputBmp = null;
+        ImageFilter imageFilter = new ImageFilter();
+
+        switch (item.getItemId()) {
+            case R.id.image_effect_highlight:
+                outputBmp = imageFilter.applyHighlightEffect(abmp.getBitmap());
+                break;
+
+            case R.id.image_effect_invert:
+                outputBmp = imageFilter.applyInvertEffect(abmp.getBitmap());
+                break;
+
+            case R.id.image_effect_gray:
+                outputBmp = imageFilter.applyGreyscaleEffect(abmp.getBitmap());
+                break;
+
+            case R.id.image_effect_gama:
+                outputBmp = imageFilter.applyGammaEffect(abmp.getBitmap(), 255, 255, 255);
+                break;
+
+            case R.id.image_effect_color_filter:
+                outputBmp = imageFilter.applyColorFilterEffect(abmp.getBitmap(), 255, 255, 255);
+                break;
+
+            case R.id.image_effect_sepia:
+                outputBmp = imageFilter.applySepiaToningEffect(abmp.getBitmap(), 1, 255, 255, 255);
+                break;
+
+            case R.id.image_effect_decrease_color_depth:
+                outputBmp = imageFilter.applyDecreaseColorDepthEffect(abmp.getBitmap(), 1);
+                break;
+
+            case R.id.image_effect_contrast:
+                outputBmp = imageFilter.applyContrastEffect(abmp.getBitmap(), 1);
+                break;
+
+            case R.id.image_effect_gaussian_blur:
+                outputBmp = imageFilter.applyGaussianBlurEffect(abmp.getBitmap());
+                break;
+
+            case R.id.image_effect_bright:
+                outputBmp = imageFilter.applyBrightnessEffect(abmp.getBitmap(), 1);
+                break;
+
+            case R.id.image_effect_share_pen:
+                outputBmp = imageFilter.applySharpenEffect(abmp.getBitmap(), 1);
+                break;
+
+            case R.id.image_effect_mean_removal:
+                outputBmp = imageFilter.applyMeanRemovalEffect(abmp.getBitmap());
+                break;
+
+            case R.id.image_effect_mean_smooth:
+                outputBmp = imageFilter.applySmoothEffect(abmp.getBitmap(), 1);
+                break;
+
+            case R.id.image_effect_mean_emboss:
+                outputBmp = imageFilter.applyEmbossEffect(abmp.getBitmap());
+                break;
+
+            case R.id.image_effect_mean_engrave:
+                outputBmp = imageFilter.applyEngraveEffect(abmp.getBitmap());
+                break;
+
+            case R.id.image_effect_mean_boost:
+                outputBmp = imageFilter.applyBoostEffect(abmp.getBitmap(), 1, 1.0F);
+                break;
+
+            case R.id.image_effect_mean_round_corner:
+                outputBmp = imageFilter.applyRoundCornerEffect(abmp.getBitmap(), 1);
+                break;
+
+            case R.id.image_effect_mean_water_mark:
+               // outputBmp = imageFilter.applyWaterMarkEffect(abmp.getBitmap());
+                break;
+
+            default:
+                handled = false;
+                break;
+        }
+
+        if (outputBmp != null) {
+            mCanvasImageView.setImageBitmap(outputBmp);
+        }
+
+        return handled;
+    }
+
     private void showImageSourceDialog() {
         final String[] items = getResources().getStringArray(R.array.photo_options);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCustomTitle(getLayoutInflater().inflate(R.layout.custom_dialog_title_view, null));
-
         builder.setCancelable(true);
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
                 boolean result = checkExternalStoragePermission(PhotoEditorActivity.this);
+
                 if (items[item].equals(getString(R.string.take_photo))) {
                     mUserChoosenTask = items[item];
-                    if(result)
+                    if (result) {
                         launchCamera();
+                    }
                 } else if (items[item].equals(getString(R.string.choose_frm_gallery))) {
                     mUserChoosenTask = items[item];
-                    if(result)
+                    if (result) {
                         launchGallery();
+                    }
                 }
             }
         });
-        builder.show();
+        builder.create().show();
     }
 
     private void launchGallery() {
@@ -191,6 +298,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
 
     private void onSelectFromGalleryResult(Intent data) {
         Bitmap bm = null;
+
         if (data != null) {
             try {
                 mEmptyPhotoViewContainer.setVisibility(View.GONE);
@@ -201,6 +309,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
                 e.printStackTrace();
             }
         }
+
         mCanvasImageView.setImageBitmap(bm);
     }
 

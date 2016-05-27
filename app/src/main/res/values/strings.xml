@@ -5,13 +5,33 @@
     <string name="add_photo">Add Photo</string>
     <string name="Effects">Effects</string>
     <string name="take_photo">Take Photo</string>
-    <string name="choose_frm_gallery">Choose from Library</string>
+    <string name="choose_frm_gallery">Choose from Gallery</string>
     <string name="permission_required">Permission Required</string>
     <string name="external_storage_permission_required"> External storage permission is necessary</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="new_image_confirmation">Your changes will be discarded. Are you sure want to quit without saving?</string>
     <string name="alert">Alert!</string>
+
+    <string name="image_effect_highlight">Highlight</string>
+    <string name="image_effect_invert">Invert</string>
+    <string name="image_effect_gray">GreyScale</string>
+    <string name="image_effect_gama">Gama</string>
+    <string name="image_effect_color_filter">Color Filter</string>
+    <string name="image_effect_sepia">Sepia</string>
+    <string name="image_effect_decrease_color_depth">Decrease Color Depth</string>
+    <string name="image_effect_contrast">Contrast</string>
+    <string name="image_effect_gaussian_blur">Gaussian Blur</string>
+    <string name="image_effect_bright">Bright</string>
+    <string name="image_effect_share_pen">Share Pen</string>
+    <string name="image_effect_mean_removal">Mean removal</string>
+    <string name="image_effect_mean_smooth">Smooth</string>
+    <string name="image_effect_mean_emboss">Emboss</string>
+    <string name="image_effect_mean_engrave">Engrave</string>
+    <string name="image_effect_mean_boost">Boost</string>
+    <string name="image_effect_mean_round_corner">Round Corner</string>
+    <string name="image_effect_mean_water_mark">Water Mark</string>
+
     <string-array name="photo_options">
         <item>@string/take_photo</item>
         <item>@string/choose_frm_gallery</item>

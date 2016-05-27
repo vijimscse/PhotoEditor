@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto" >
+
+    <item
+        android:id="@+id/image_effect_highlight"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/image_effect_highlight"
+        android:visible="true"/>
+
+    <item
+        android:id="@+id/image_effect_invert"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/image_effect_invert"
+        android:visible="true"/>
+
+    <item
+        android:id="@+id/image_effect_gray"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/image_effect_gray"
+        android:visible="true"/>
+
+
+    <item
+        android:id="@+id/image_effect_gama"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/image_effect_gama"
+        android:visible="true"/>
+
+    <item
+        android:id="@+id/image_effect_color_filter"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/image_effect_color_filter"
+        android:visible="true"/>
+
+    <item
+        android:id="@+id/image_effect_sepia"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/image_effect_sepia"
+        android:visible="true"/>
+
+    <item
+        android:id="@+id/image_effect_decrease_color_depth"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/image_effect_decrease_color_depth"
+        android:visible="true"/>
+
+
+    <item
+        android:id="@+id/image_effect_contrast"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/image_effect_contrast"
+        android:visible="true"/>
+
+    <item
+        android:id="@+id/image_effect_gaussian_blur"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/image_effect_gaussian_blur"
+        android:visible="true"/>
+
+    <item
+        android:id="@+id/image_effect_bright"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/image_effect_bright"
+        android:visible="true"/>
+
+    <item
+        android:id="@+id/image_effect_share_pen"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/image_effect_share_pen"
+        android:visible="true"/>
+
+    <item
+        android:id="@+id/image_effect_mean_removal"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/image_effect_mean_removal"
+        android:visible="true"/>
+
+    <item
+        android:id="@+id/image_effect_mean_smooth"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/image_effect_mean_smooth"
+        android:visible="true"/>
+
+    <item
+        android:id="@+id/image_effect_mean_emboss"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/image_effect_mean_emboss"
+        android:visible="true"/>
+
+    <item
+        android:id="@+id/image_effect_mean_engrave"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/image_effect_mean_engrave"
+        android:visible="true"/>
+
+    <item
+        android:id="@+id/image_effect_mean_boost"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/image_effect_mean_boost"
+        android:visible="true"/>
+
+    <item
+        android:id="@+id/image_effect_mean_round_corner"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/image_effect_mean_round_corner"
+        android:visible="true"/>
+
+    <item
+        android:id="@+id/image_effect_mean_water_mark"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/image_effect_mean_water_mark"
+        android:visible="true"/>
+
+</menu>
