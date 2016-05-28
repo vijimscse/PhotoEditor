@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -40,6 +41,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+/**
+ * Photo Editor screen used to edit the photo by various image splashing techniques, rotation, saving to collections.
+ *
+ */
 public class PhotoEditorActivity extends AppCompatActivity implements View.OnClickListener,
         PopupMenu.OnMenuItemClickListener {
 
@@ -231,73 +236,86 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
     }
 
     @Override
-    public boolean onMenuItemClick(MenuItem item) {
-        BitmapDrawable abmp = (BitmapDrawable) mCanvasImageView.getDrawable();
-        boolean handled = true;
-        Bitmap outputBmp = null;
-        ImageFilter imageFilter = new ImageFilter();
+    public boolean onMenuItemClick(final MenuItem item) {
+        final BitmapDrawable abmp = (BitmapDrawable) mCanvasImageView.getDrawable();
+        final boolean handled = true;
+        final ProgressDialog progressDialog = ProgressDialog.show(this, getString(R.string.loading), getString(R.string.applying_effect));
+        progressDialog.show();
 
-        switch (item.getItemId()) {
-            case R.id.image_effect_highlight:
-                outputBmp = imageFilter.applyHighlightEffect(abmp.getBitmap());
-                break;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Bitmap outputBmp = null;
+                ImageFilter imageFilter = new ImageFilter();
 
-            case R.id.image_effect_invert:
-                outputBmp = imageFilter.applyInvertEffect(abmp.getBitmap());
-                break;
+                switch (item.getItemId()) {
+                    case R.id.image_effect_highlight:
+                        outputBmp = imageFilter.applyHighlightEffect(abmp.getBitmap());
+                        break;
 
-            case R.id.image_effect_gray:
-                outputBmp = imageFilter.applyGreyscaleEffect(abmp.getBitmap());
-                break;
+                    case R.id.image_effect_invert:
+                        outputBmp = imageFilter.applyInvertEffect(abmp.getBitmap());
+                        break;
 
-            case R.id.image_effect_decrease_color_depth:
-                outputBmp = imageFilter.applyDecreaseColorDepthEffect(abmp.getBitmap(), 1);
-                break;
+                    case R.id.image_effect_gray:
+                        outputBmp = imageFilter.applyGreyscaleEffect(abmp.getBitmap());
+                        break;
 
-            case R.id.image_effect_contrast:
-                outputBmp = imageFilter.applyContrastEffect(abmp.getBitmap(), 1);
-                break;
+                    case R.id.image_effect_decrease_color_depth:
+                        outputBmp = imageFilter.applyDecreaseColorDepthEffect(abmp.getBitmap(), 1);
+                        break;
 
-            case R.id.image_effect_gaussian_blur:
-                outputBmp = imageFilter.applyGaussianBlurEffect(abmp.getBitmap());
-                break;
+                    case R.id.image_effect_contrast:
+                        outputBmp = imageFilter.applyContrastEffect(abmp.getBitmap(), 1);
+                        break;
 
-            case R.id.image_effect_bright:
-                outputBmp = imageFilter.applyBrightnessEffect(abmp.getBitmap(), 1);
-                break;
+                    case R.id.image_effect_gaussian_blur:
+                        outputBmp = imageFilter.applyGaussianBlurEffect(abmp.getBitmap());
+                        break;
 
-            case R.id.image_effect_share_pen:
-                outputBmp = imageFilter.applySharpenEffect(abmp.getBitmap(), 1);
-                break;
+                    case R.id.image_effect_bright:
+                        outputBmp = imageFilter.applyBrightnessEffect(abmp.getBitmap(), 1);
+                        break;
 
-            case R.id.image_effect_mean_removal:
-                outputBmp = imageFilter.applyMeanRemovalEffect(abmp.getBitmap());
-                break;
+                    case R.id.image_effect_share_pen:
+                        outputBmp = imageFilter.applySharpenEffect(abmp.getBitmap(), 1);
+                        break;
 
-            case R.id.image_effect_mean_smooth:
-                outputBmp = imageFilter.applySmoothEffect(abmp.getBitmap(), 1);
-                break;
+                    case R.id.image_effect_mean_removal:
+                        outputBmp = imageFilter.applyMeanRemovalEffect(abmp.getBitmap());
+                        break;
 
-            case R.id.image_effect_mean_emboss:
-                outputBmp = imageFilter.applyEmbossEffect(abmp.getBitmap());
-                break;
+                    case R.id.image_effect_mean_smooth:
+                        outputBmp = imageFilter.applySmoothEffect(abmp.getBitmap(), 1);
+                        break;
 
-            case R.id.image_effect_mean_engrave:
-                outputBmp = imageFilter.applyEngraveEffect(abmp.getBitmap());
-                break;
+                    case R.id.image_effect_mean_emboss:
+                        outputBmp = imageFilter.applyEmbossEffect(abmp.getBitmap());
+                        break;
 
-            case R.id.image_effect_mean_round_corner:
-                outputBmp = imageFilter.applyRoundCornerEffect(abmp.getBitmap(), 1);
-                break;
+                    case R.id.image_effect_mean_engrave:
+                        outputBmp = imageFilter.applyEngraveEffect(abmp.getBitmap());
+                        break;
 
-            default:
-                handled = false;
-                break;
-        }
+                    case R.id.image_effect_mean_round_corner:
+                        outputBmp = imageFilter.applyRoundCornerEffect(abmp.getBitmap(), 1);
+                        break;
 
-        if (outputBmp != null) {
-            mCanvasImageView.setImageBitmap(outputBmp);
-        }
+                    default:
+                        break;
+                }
+                final Bitmap finalOutputBmp = outputBmp;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressDialog.dismiss();
+                        if (finalOutputBmp != null) {
+                            mCanvasImageView.setImageBitmap(finalOutputBmp);
+                        }
+                    }
+                });
+            }
+        }).start();
 
         return handled;
     }
