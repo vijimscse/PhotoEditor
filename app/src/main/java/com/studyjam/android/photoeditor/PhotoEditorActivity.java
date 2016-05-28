@@ -344,6 +344,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
                 options.inPreferredConfig = Bitmap.Config.ARGB_8888;
                 Bitmap bitmap = BitmapFactory.decodeFile(selectedFilePath, options);
                 mCanvasImageView.setImageBitmap(bitmap);
+                mCurrenctFileName = null;
                 updateUI();
             }
         }

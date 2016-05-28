@@ -59,9 +59,9 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="100dp"
+        android:layout_marginLeft="@dimen/fab_marginLeft"
+        android:layout_marginRight="@dimen/fab_marginRight"
+        android:layout_marginBottom="@dimen/fab_marginBottom"
         android:src="@drawable/plus_icon"/>
 
 </RelativeLayout>

@@ -22,9 +22,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/text_value_color"
-            android:textSize="20sp"
+            android:textSize="@dimen/addPhotoFontSize"
             android:textStyle="bold"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/addPhotoMarginTop"
             android:text="@string/add_photo"/>
     </LinearLayout>
 
@@ -38,7 +38,7 @@
         android:src="@drawable/ic_add_photo"/>
 
     <LinearLayout android:layout_width="match_parent"
-                  android:layout_height="100dp"
+                  android:layout_height="@dimen/photoOptionsContainerHeight"
                   android:orientation="horizontal"
                   android:gravity="center"
                   android:layout_alignParentBottom="true"

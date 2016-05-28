@@ -5,6 +5,6 @@
           android:layout_height="wrap_content"
           android:textColor="@color/text_value_color"
           android:gravity="center_vertical"
-          android:padding="10dp"
-          android:textSize="14sp"
+          android:padding="@dimen/savedFileItemPadding"
+          android:textSize="@dimen/savedFileItemFontSize"
 />

@@ -4,4 +4,17 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="fab_marginTop">40dp</dimen>
+    <dimen name="fab_marginLeft">40dp</dimen>
+    <dimen name="fab_marginRight">20dp</dimen>
+    <dimen name="fab_marginBottom">100dp</dimen>
+    <dimen name="toolBarTitleFontSize">20sp</dimen>
+    <dimen name="toolBarTitleDrawablePadding">10dp</dimen>
+    <dimen name="noFilesFoundFontSize">20sp</dimen>
+    <dimen name="addPhotoFontSize">20sp</dimen>
+    <dimen name="addPhotoMarginTop">10dp</dimen>
+    <dimen name="photoOptionsContainerHeight">100dp</dimen>
+    <dimen name="dialogTitlePadding">10dp</dimen>
+    <dimen name="dialogTitleFontSize">20sp</dimen>
+    <dimen name="savedFileItemPadding">10dp</dimen>
+    <dimen name="savedFileItemFontSize">14sp</dimen>
 </resources>
