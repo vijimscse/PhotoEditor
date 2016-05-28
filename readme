@@ -1,0 +1,12 @@
+1. Clone the git repository from https://github.com/vijimscse/PhotoEditor.git in Android Studio
+2. Run the project once the IDE gradle setup is done
+3. Connect the device to system using USB cable
+4. PhotoEditor gets displayed on the device connected.
+5. Using Photo Editor, Now you can edit your photo in multiple ways
+    * Choose image From gallery
+    * You can use camera
+    * Image splashing techniques
+    * Rotate your image clockwise/ counter clockwise
+    * Save image to collections
+    * Edit the saved file from collection list
+    
