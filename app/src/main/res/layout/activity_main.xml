@@ -60,6 +60,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_marginLeft="@dimen/fab_marginLeft"
+        android:visibility="gone"
         android:layout_marginRight="@dimen/fab_marginRight"
         android:layout_marginBottom="@dimen/fab_marginBottom"
         android:src="@drawable/plus_icon"/>

@@ -62,6 +62,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
     private int mCWRotationAngle;
     private static final String MIME_TYPE = "image/*";
     private String mCurrenctFileName;
+    private FloatingActionButton mFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,8 +82,8 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         titleView.setText(R.string.photo_editor);
         toolbar.setTitleTextColor(ContextCompat.getColor(this, android.R.color.white));
         setSupportActionBar(toolbar);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        mFab = (FloatingActionButton) findViewById(R.id.fab);
+        mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mImageChoosen) {
@@ -442,6 +443,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         mCanvasImageView.setVisibility(View.VISIBLE);
         mImageChoosen = true;
         mPhotoOptionsContainer.setVisibility(View.VISIBLE);
+        mFab.setVisibility(View.VISIBLE);
     }
 
     /**
