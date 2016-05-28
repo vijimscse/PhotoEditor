@@ -6,6 +6,7 @@
           android:padding="@dimen/dialogTitlePadding"
           android:textStyle="bold"
           android:text="@string/add_photo"
+          android:id="@+id/dialogTitle"
           android:textColor="@android:color/white"
           android:textSize="@dimen/dialogTitleFontSize"
           android:background="@color/colorPrimary">

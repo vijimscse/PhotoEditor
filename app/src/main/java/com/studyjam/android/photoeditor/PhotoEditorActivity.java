@@ -3,6 +3,7 @@ package com.studyjam.android.photoeditor;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -24,6 +25,8 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -121,6 +124,8 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
         builder.show();
     }
 
+
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -157,10 +162,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
 
             case R.id.save_file:
                 if (mImageChoosen) {
-                    if (TextUtils.isEmpty(mCurrenctFileName)) {
-                        mCurrenctFileName = System.currentTimeMillis() + Constants.FILE_EXTENSION;
-                    }
-                    saveFile();
+                    showSaveDialog();
                 } else {
                     Toast.makeText(this, R.string.please_edit_image, Toast.LENGTH_SHORT).show();
                 }
@@ -195,6 +197,32 @@ public class PhotoEditorActivity extends AppCompatActivity implements View.OnCli
             updateUI();
             mCanvasImageView.setImageBitmap(bmp);
         }
+    }
+
+    /**
+     * Displays the alert dialog when there are some changes left without saving
+     */
+    private void showSaveDialog() {
+        final Dialog saveDialog = new Dialog(this);
+        saveDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        saveDialog.setContentView(R.layout.dialog_save_image);
+        TextView titleView = (TextView) saveDialog.findViewById(R.id.dialogTitle);
+        titleView.setText(R.string.save);
+        final EditText fileNameEditText = (EditText) saveDialog.findViewById(R.id.file_name_edit_text);
+        saveDialog.findViewById(R.id.saveButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!TextUtils.isEmpty(fileNameEditText.getText().toString())) {
+                    mCurrenctFileName = fileNameEditText.getText().toString();
+                    saveFile();
+                    saveDialog.dismiss();
+                } else {
+                    Toast.makeText(PhotoEditorActivity.this, R.string.file_name_empty, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        saveDialog.show();
     }
 
     private void launchSavedCollectionsScreen() {

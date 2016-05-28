@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <include layout="@layout/custom_dialog_title_view" />
+
+    <View android:layout_width="match_parent" android:layout_height="@dimen/seperator_height"
+          android:background="@android:color/darker_gray"/>
+
+    <EditText android:layout_width="match_parent" android:layout_height="wrap_content"
+              android:padding="@dimen/fileNameEditTextPadding"
+              android:id="@+id/file_name_edit_text"
+              android:textSize="@dimen/dialogContentFontSize"
+              android:layout_margin="@dimen/fileNameEditTextPadding"
+              android:hint="@string/file_name"/>
+
+    <Button android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:id="@+id/saveButton"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/dialogTitleFontSize"
+            android:background="@color/colorPrimary"
+            android:text="@string/ok"/>
+
+</LinearLayout>
